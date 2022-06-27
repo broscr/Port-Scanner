@@ -21,9 +21,6 @@ $ java -jar Port-Scanner-0.0.1.jar-with-depencdencies.jar
 #### RoadMap
 
 - ```diff
-  @@ Version Release @@
-  ```
-- ```diff
   @@ Port Details Search @@
   ```
 - ```diff
