@@ -3,7 +3,7 @@ import connector.Connector;
 import java.net.*;
 import java.util.Scanner;
 
-public class Main {
+public class PortScanner {
     private static Scanner scanner;
 
     public static void main(String[] args) {
