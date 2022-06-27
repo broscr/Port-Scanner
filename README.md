@@ -1,3 +1,6 @@
+![Workflow](https://github.com/broscr/Port-Scanner/actions/workflows/maven.yml/badge.svg)
+
+
 #### Port-Scanner
 
 ``
