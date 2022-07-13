@@ -2,14 +2,14 @@ package connector;
 
 import model.Status;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -17,13 +17,23 @@ public class Connector {
 
     private final int TIMEOUT = 1000;
     private final String ip;
-    private final int[] RANGE;
+    private int[] RANGE;
+    private int onePort;
+
+    public Connector(String ip, int onePort) {
+        this.ip = ip;
+        this.onePort = onePort;
+
+        onePortControl();
+    }
 
     public Connector(String ip, int startPort, int endPort) {
         int MAX_RANGE = 65000;
 
         this.ip = ip;
         RANGE = IntStream.range(startPort, Math.min(endPort, MAX_RANGE)).toArray();
+
+        portControl();
     }
 
     private Future<Status> portConnect(ExecutorService executorService, String ip, int port) {
@@ -82,6 +92,26 @@ public class Connector {
         showTotalTime(System.currentTimeMillis() - startMillis);
     }
 
+    private void onePortControl() {
+        long startMillis = System.currentTimeMillis();
+
+        final ExecutorService executorService = Executors.newFixedThreadPool(1);
+
+        Future<Status> response = portConnect(executorService, ip, onePort);
+
+        executorService.shutdown();
+
+        try {
+            System.out.println(response.get().getPort() + " : " + response.get().isOpen());
+        } catch (InterruptedException | ExecutionException e) {
+            System.out.println(e.getMessage());
+            exitRun();
+        }
+
+
+        showTotalTime(System.currentTimeMillis() - startMillis);
+    }
+
     private void showTotalTime(long milliseconds) {
         // formula for conversion for
         // milliseconds to minutes.
@@ -95,5 +125,9 @@ public class Connector {
         System.out.println(milliseconds + " Milliseconds = "
                 + minutes + " minutes and "
                 + seconds + " seconds.");
+    }
+
+    private void exitRun() {
+        System.exit(0);
     }
 }
