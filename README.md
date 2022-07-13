@@ -18,7 +18,7 @@ $ mvn clean package
 ```bash
 $ java -jar Port-Scanner-0.0.1-jar-with-dependencies.jar 192.168.1.1 80
 or
-$ java -jar Port-Scanner-0.0.1-jar-with-dependencies.jar 192.168.1.1 80
+$ java -jar Port-Scanner-0.0.1-jar-with-dependencies.jar example.com 1-500
 ```
 
 #### RoadMap
